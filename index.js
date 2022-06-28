@@ -30,9 +30,18 @@ app.post('/api/shorturl/',function(req,res){
 
   try {
     url = new URL(rawURL);
-    var short = shortLinks.length;
-    shortLinks.push({"original_url":req.body.url,"short_url":short})
-    res.json({"original_url":req.body.url,"short_url":short})
+
+    if (url.protocol === "http:" || url.protocol === "https:") {
+      
+      var short = shortLinks.length;
+      shortLinks.push({"original_url":req.body.url,"short_url":short})
+      res.json({"original_url":req.body.url,"short_url":short})
+
+    } else {
+      return res.json({"error":"Invalid URL"})      
+    }
+
+    console.log(url.protocol)
   } catch (_) {
     return res.json({"error":"Invalid URL"})
   }
